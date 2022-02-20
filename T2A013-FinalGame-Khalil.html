@@ -1,0 +1,165 @@
+
+<canvas id="myCoolTag" width="600" height="600" style="border:1px solid #000000; align:center;"></canvas>
+
+<script>
+let myClock
+
+var myCanvas = document.getElementById("myCoolTag");
+var myContext = myCanvas.getContext("2d");
+
+
+myxpos = 0
+myypos = 0
+movingRight = 0
+movingDown = 0
+movingLeft = 0
+movingUp = 0
+myyspawnpoint = 200
+myxspawnpoint = 40
+maxbullets = 5
+currentbullets = 0
+mystarttime = 25
+mycurrenttime = 0
+
+
+
+function CollisionBox(my1x, my1y, my1width, my1height,my2x,my2y,my2width,my2height){
+
+myContext.fillStyle = "Yellow";
+//Left1
+myContext.fillRect(my1x,my1y,my1width-30,my1height)
+//Top1
+myContext.fillRect(my1x,my1y,my1width,my1height-30)
+//Bottom1
+myContext.fillRect(my1x,my1y+32,my1width,my1height-30)
+//Right2
+myContext.fillRect(my1x+30,my1y,my1width-30,my1height)
+
+
+//Right2
+myContext.fillRect(my2x+30,my2y,my2width-30,my2height)
+//Bottom2
+myContext.fillRect(my2x,my2y+32,my2width,my2height-30)
+//Top2
+myContext.fillRect(my2x,my2y,my2width,my2height-30)
+//Left2
+myContext.fillRect(my2x,my2y,my2width-30,my2height)
+
+
+//LEFT1 AND RIGHT2
+if(my1x + my1width-30 >= my2x+30 &&
+   my1x <= my2x+30 + my2width-30 &&
+   my1y + my1height >= my2y &&
+   my1y <= my2y + my2height){movingLeft = 0
+
+}
+
+if(my1x + my1width >= my2x &&
+   my1x <= my2x + my2width &&
+   my1y + my1height-30 >= my2y+32 &&
+   my1y <= my2y+32 + my2height-30){movingUp = 0
+
+}
+
+
+if(my1x + my1width >= my2x &&
+   my1x <= my2x + my2width &&
+   my1y+32 + my1height-30 >= my2y &&
+   my1y+32 <= my2y + my2height-30){movingDown = 0
+
+}
+
+
+if(my1x+32 + my1width-30 >= my2x &&
+   my1x+32 <= my2x + my2width-30 &&
+   my1y + my1height >= my2y &&
+   my1y <= my2y + my2height){movingRight = 0
+
+}
+
+
+}
+
+
+
+//////////////////////////STARTS HERE//////////////
+function Update(){
+  clearInterval(myClock)
+  myClock = setInterval(function(){
+
+mycurrenttime -= 0.5
+
+
+myContext.fillStyle = "Black";
+myContext.fillRect(0,0,600,600)
+
+//////////////////////////////////////
+////////////////////////////////////////////GREEN BOX/////////////////////////////////
+
+
+myContext.fillStyle = "Green";
+myContext.fillRect(300,250,32,32)
+
+
+//////////////////////////////////////PLAYER///////////////////////////////
+
+
+myContext.fillStyle = "Red";
+myContext.fillRect(myxpos,myypos,32,32)
+
+
+//////////////////////////////////////Bot////////////////////
+
+///////////////////KEY DOWN///
+document.addEventListener('keydown', function(event){
+if(event.key == 'd'){movingRight = 1}
+if(event.key == 's'){movingDown = 1}
+if(event.key == 'a'){movingLeft = 1}
+if(event.key == 'w'){movingUp = 1}
+if(event.key == 'f'){
+if(mycurrenttime <= 0){
+mycurrenttime = mystarttime
+myyspawnpoint = myypos - 8
+myxspawnpoint = myxpos + 16}}
+
+})
+
+CollisionBox(myxpos,myypos,32,32,300,250,32,32)
+/////////////////KEY UP///
+document.addEventListener('keyup', function(event){
+if(event.key == 'd'){movingRight = 0}
+if(event.key == 's'){movingDown = 0}
+if(event.key == 'a'){movingLeft = 0}
+if(event.key == 'w'){movingUp = 0}
+
+
+})
+
+
+
+if(movingRight == 1){myxpos += 5}
+if(movingDown == 1){myypos += 5}
+if(movingLeft == 1){myxpos -= 5}
+if(movingUp == 1){myypos -= 5}
+
+
+
+
+
+myContext.fillStyle = "Yellow";
+myContext.fillRect(myxspawnpoint,myyspawnpoint,8,32)
+myyspawnpoint -= 12
+
+
+
+
+////////////////////////////////////////////////////////////////ENDS HERE//////////////
+},10)
+}
+
+
+Update()
+
+
+
+</script>
